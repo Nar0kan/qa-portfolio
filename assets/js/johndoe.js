@@ -55,96 +55,84 @@ $(window).on("load", function() {
     });
 });
 
+//form submission
+// function submitForm() {
+//   // Get form data
+//   const recipient = JSON.stringify(document.getElementById("recipient").value);
+//   const name = JSON.stringify(document.getElementById("name").value);
+//   const subject = JSON.stringify(document.getElementById("subject").value);
+//   const message = JSON.stringify(document.getElementById("message").value);
 
-// google maps
-function initMap() {
-// Styles a map in night mode.
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 40.674, lng: -73.945},
-        zoom: 12,
-        scrollwheel:  false,
-        navigationControl: false,
-        mapTypeControl: false,
-        scaleControl: false,
-      styles: [
-        {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-        {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
-        {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
-        {
-          featureType: 'administrative.locality',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#d59563'}]
-        },
-        {
-          featureType: 'poi',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#d59563'}]
-        },
-        {
-          featureType: 'poi.park',
-          elementType: 'geometry',
-          stylers: [{color: '#263c3f'}]
-        },
-        {
-          featureType: 'poi.park',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#6b9a76'}]
-        },
-        {
-          featureType: 'road',
-          elementType: 'geometry',
-          stylers: [{color: '#38414e'}]
-        },
-        {
-          featureType: 'road',
-          elementType: 'geometry.stroke',
-          stylers: [{color: '#212a37'}]
-        },
-        {
-          featureType: 'road',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#9ca5b3'}]
-        },
-        {
-          featureType: 'road.highway',
-          elementType: 'geometry',
-          stylers: [{color: '#746855'}]
-        },
-        {
-          featureType: 'road.highway',
-          elementType: 'geometry.stroke',
-          stylers: [{color: '#1f2835'}]
-        },
-        {
-          featureType: 'road.highway',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#f3d19c'}]
-        },
-        {
-          featureType: 'transit',
-          elementType: 'geometry',
-          stylers: [{color: '#2f3948'}]
-        },
-        {
-          featureType: 'transit.station',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#d59563'}]
-        },
-        {
-          featureType: 'water',
-          elementType: 'geometry',
-          stylers: [{color: '#17263c'}]
-        },
-        {
-          featureType: 'water',
-          elementType: 'labels.text.fill',
-          stylers: [{color: '#515c6d'}]
-        },
-        {
-          featureType: 'water',
-          elementType: 'labels.text.stroke',
-          stylers: [{color: '#17263c'}]
-        }
-      ]
+//   // Create an object with the form data
+//   const formData = JSON.stringify({
+//       website: "test",
+//       recipient: recipient,
+//       name: name,
+//       subject: subject,
+//       message: message,
+//   });
+
+//   // Send a POST request to your Django backend
+//   fetch("https://email-backend-system.vercel.app/api/test/", {
+//       method: "POST",
+//       headers: {
+//           "Content-Type": "application/json"
+//       },
+//       body: formData,
+//   })
+//   .then((response) => {
+//       if (response.ok) {
+//           alert("Email sent successfully!");
+//       } else {
+//           alert("Email failed to send.");
+//       }
+//   })
+  
+// }
+
+// Attach the submitForm function to the button click event
+// document.getElementById("submitButton").addEventListener("click", submitForm);
+document.getElementById("submitButton").addEventListener("click", function (e) {
+    e.preventDefault();
+
+    // Get form data
+    const recipient = document.getElementById("recipient").value;
+    const name = document.getElementById("name").value;
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value;
+
+    // Create an object with the form data
+    const formData = JSON.stringify({
+        website: "qa-portfolio",
+        recipient: recipient,
+        name: name,
+        subject: subject,
+        message: message,
     });
-}
+
+    // Create a new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://email-backend-system.vercel.app/api/qa-portfolio/", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(formData);
+
+    // Handle the response
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) { // Status starts with 2
+            alert("Email sent successfully!");
+        } else if (xhr.status >= 400 && xhr.status < 600) { // Status starts with 4 or 5
+            alert("Email failed to send. Error: " + xhr.status);
+        } else {
+            alert("An unexpected error occurred.");
+        }
+    };
+
+    xhr.onerror = function () {
+        console.error("An error occurred while sending the email.");
+        alert("An error occurred while sending the email.");
+    };
+
+    // Send the POST request with JSON data
+    // xhr.send(JSON.stringify(formData));
+});
